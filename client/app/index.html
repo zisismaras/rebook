@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Rebook App</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link rel="stylesheet" href="http://169.45.234.69/rebook/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <nav class="brown brown-darken-1" role="navigation">
+            <div class="nav-wrapper"><a id="logo-container" href="#" class="brand-logo  hide-on-med-and-down left">Rebook</a>
+                <a id="logo-container" href="#" class="brand-logo center hide-on-large-only">Rebook</a>
+                <ul class="right">
+                    <li><a href="#new_bookmark" class="modal-trigger"><i class="material-icons">bookmark_border</i></a>
+                    </li>
+                    <li><a href="#new_folder" class="modal-trigger"><i class="material-icons">create_new_folder</i></a>
+                    </li>
+                </ul>
+                <ul id="nav-mobile" class="collection side-nav" v-cloak>
+                    <li class="collection-item avatar" v-for="folder in folders" id="{{folder.id}}" v-on:click="showBookmarks(folder.id, $event)">
+                        <i class="material-icons circle green">folder</i>
+                        <span class="title"><h6>{{folder.name}}</h6></span>
+                        <p>
+                            {{folder.description}}
+                        </p>
+                    </li>
+                    <li class="collection-item avatar" v-on:click="showBookmarks(0, $event)"><i class="material-icons circle">folder</i><span class="title"><h6>Uncategorized</h6></span>
+                    </li>
+                    <li class="collection-item avatar" v-on:click="showArchived()"><i class="material-icons circle">folder</i><span class="title"><h6>Archived</h6></span>
+                    </li>
+                </ul>
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="content">
+            <div class="row">
+
+                <div class="col s2  hide-on-med-and-down ">
+                    <ul class="collection" id="folders" v-cloak>
+                        <li class="collection-item avatar" v-for="folder in folders" id="{{folder.id}}" v-on:click="showBookmarks(folder.id, $event)">
+                            <i class="material-icons circle green">folder</i>
+                            <span class="title"><h6>{{folder.name}}</h6></span>
+                            <p>
+                                {{folder.description}}
+                            </p>
+                        </li>
+                        <li class="collection-item avatar" v-on:click="showBookmarks(0, $event)"><i class="material-icons circle">folder</i><span class="title"><h6>Uncategorized</h6></span>
+                        </li>
+                        <li class="collection-item avatar" v-on:click="showArchived()"><i class="material-icons circle">folder</i><span class="title"><h6>Archived</h6></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col l10 s12">
+                    <ul class="collapsible popout" data-collapsible="accordion" id="bookmarks" v-cloak>
+                        <template v-for="bookmark in bookmarks">
+                            <li v-for="bookmark_item in bookmark">
+                                <div class="collapsible-header">{{bookmark_item.name}} - {{bookmark_item.url}}</div>
+                                <div class="collapsible-body">
+                                    <div class="article-toolbar right horizontal" style="margin-right:5px;">
+                                        <a class="btn tooltipped" style="background-color: #4CAF50 !important" data-position="bottom" data-delay="50" data-tooltip="View Original" href="{{bookmark_item.url}}" target="_blank"><i class="material-icons">send</i></a>
+                                        <a class="btn tooltipped" style="background-color: #4CAF50 !important" data-position="bottom" data-delay="50" data-tooltip="Archive" v-on:click="archive([bookmark, bookmark_item])"><i class="material-icons">archive</i></a>
+                                        <a class="btn tooltipped" style="background-color: #4CAF50 !important" data-position="bottom" data-delay="50" data-tooltip="Delete" v-on:click="delete(bookmark_item)"><i class="material-icons">delete</i></a>
+                                    </div>
+                                    <div v-model="bookmark-content">
+                                        <blockquote v-show="bookmark_item.notes" style="border-left: 5px solid #4CAF50!important;margin-left:5px;">
+                                            {{bookmark_item.notes}}
+                                        </blockquote>
+                                        <p class="flow-text" v-show="except">{{{bookmark_item.except}}}</p>
+                                        <p class="flow-text" v-show="!except">{{{bookmark_item.content}}}</p>
+                                    </div>
+                                    <div class="center horizontal">
+                                        <a class="btn" v-show="except" href="#" v-on:click="readMore()" style="background-color: #4CAF50 !important; margin-bottom: 20px;">Read More</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                    <div class="progress right green lighten-3 hide" style="margin-top:20px">
+                        <div class="indeterminate green"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Modal Structure -->
+        <div id="new_bookmark" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h5 class="center-align">New Bookmark</h5>
+                <div class="row">
+                    <validator name="validation1">
+                        <form novalidate class="col s12">
+                            <div class="input-field col s12">
+                                <input placeholder="" id="new_bookmark_url" v-model="new_bookmark_url" type="text" v-validate:new_bookmark_url="['url']">
+                                <label for="new_bookmark_url">Url</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <select v-validate:folderselect="{ required: true }" v-model="folderSelect" id="folderSelect" options="folderIds">
+                                    <option v-for="folder in folderIds" v-bind:value="folder.value">{{folder.text}}</option>
+                                </select>
+                            </div>
+                            <div class="input-field col s12">
+                                <textarea placeholder="" id="new_bookmark_notes" v-model="new_bookmark_notes" type="text" class="materialize-textarea"></textarea>
+                                <label for="new_bookmark_notes">Notes</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <button disabled v-show="($validation1.invalid || $validation1.pristine)" class="waves-effect waves-light modal-close btn right">add</button>
+                                <button type="submit" v-show="$validation1.valid && $validation1.dirty" class="waves-effect waves-light modal-close btn right" style="background-color: #4CAF50 !important" v-on:click="create('', $event)">add</button>
+                            </div>
+                        </form>
+                    </validator>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Structure -->
+        <div id="new_folder" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h5 class="center-align">New Folder</h5>
+                <div class="row">
+                    <validator name="validation1">
+                        <form novalidate class="col s12">
+                            <div class="input-field col s12">
+                                <input placeholder="" id="folder_name" v-model="folder_name" type="text" v-validate:folder_name="['required']">
+                                <label for="folder_name">Name</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <textarea placeholder="" id="folder_description" v-model="folder_description" type="text" class="materialize-textarea"></textarea>
+                                <label for="folder_description">Description</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <button disabled v-show="($validation1.invalid && $validation1.touched) || ($validation1.invalid && $validation1.untouched)" class="waves-effect waves-light modal-close btn right">add</button>
+                                <button type="submit" v-show="$validation1.valid" class="waves-effect waves-light modal-close btn right" style="background-color: #4CAF50 !important" v-on:click="create('', $event)">add</button>
+                            </div>
+                        </form>
+                    </validator>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">
+                <p class="center" style="margin-top:0">Made with &hearts; by <a class="grey-text" href="http://zisismaras.me">ZM</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        var Rebook = {};
+    </script>
+
+    <!--  Scripts-->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.16/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-validator/2.0.0-alpha.20/vue-validator.min.js"></script>
+    <script src="http://169.45.234.69/rebook/js/services/fetch.js"></script>
+    <script src="http://169.45.234.69/rebook/js/services/create.js"></script>
+    <script src="http://169.45.234.69/rebook/js/services/update.js"></script>
+    <script src="http://169.45.234.69/rebook/js/services/delete.js"></script>
+    <script src="http://169.45.234.69/rebook/js/controllers/folder_controller.js"></script>
+    <script src="http://169.45.234.69/rebook/js/controllers/bookmark_controller.js"></script>
+    <script src="http://169.45.234.69/rebook/js/init.js"></script>
+
+
+</body>
+
+</html>

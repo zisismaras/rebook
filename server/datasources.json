@@ -1,0 +1,14 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mysql": {
+    "host": "localhost",
+    "database": "rebook",
+    "password": "root",
+    "name": "mysql",
+    "connector": "mysql",
+    "user": "root"
+  }
+}

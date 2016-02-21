@@ -1,0 +1,58 @@
+{
+  "name": "bookmark",
+  "plural": "bookmarks",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": false
+  },
+  "mixins": {
+    "TimeStamp" : true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": false
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "except": {
+      "type": "object",
+      "required": false
+    },
+    "content": {
+      "type": "object",
+      "required": false
+    },
+    "favicon": {
+      "type": "string",
+      "required": false
+    },
+    "notes": {
+      "type": "object",
+      "required": false
+    },
+    "archived": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "team": {
+      "type": "belongsTo",
+      "model": "team",
+      "foreignKey": "teamId"
+    },
+    "folder": {
+      "type": "belongsTo",
+      "model": "folder",
+      "foreignKey": "folderId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,39 @@
+{
+  "name": "team",
+  "plural": "teams",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": false
+  },
+  "mixins": {
+    "TimeStamp" : true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "users": {
+      "type": "hasMany",
+      "model": "user"
+    },
+    "folders": {
+      "type": "hasMany",
+      "model": "folder",
+      "foreignKey": "folderId",
+      "through": "folderBookmark"
+    },
+    "bookmarks": {
+      "type": "hasMany",
+      "model": "bookmark",
+      "foreignKey": "bookmarkId",
+      "through": "folderBookmark"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

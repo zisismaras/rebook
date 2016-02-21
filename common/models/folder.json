@@ -1,0 +1,32 @@
+{
+  "name": "folder",
+  "plural": "folders",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": false
+  },
+  "mixins": {
+    "TimeStamp" : true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "team": {
+      "type": "belongsTo",
+      "model": "team",
+      "foreignKey": "teamId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

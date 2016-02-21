@@ -1,0 +1,28 @@
+{
+  "name": "folderBookmark",
+  "plural": "folderbookmarks",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": false
+  },
+  "mixins": {
+    "TimeStamp" : true
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "folder": {
+      "type": "belongsTo",
+      "model": "folder",
+      "foreignKey": "folderId"
+    },
+    "bookmark": {
+      "type": "belongsTo",
+      "model": "bookmark",
+      "foreignKey": "bookmarkId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
