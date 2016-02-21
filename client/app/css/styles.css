@@ -1,5 +1,6 @@
 .collection-item {
-    cursor:hand;
+    cursor: pointer;
+    cursor: hand;
     background-color:#8d6e63!important;
     color:#eafaf9;
 }

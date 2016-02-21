@@ -27,9 +27,9 @@ Rebook.bookmark_controller = {
                         this.except = false;
                     },
                     archive: function(bookmarkArray) {
-                        let bookmark = bookmarkArray[0];
-                        let bookmark_item = bookmarkArray[1];
-                        let data = {
+                        var bookmark = bookmarkArray[0];
+                        var bookmark_item = bookmarkArray[1];
+                        var data = {
                             id: bookmark_item.id,
                             archived: true
                         };
@@ -44,7 +44,7 @@ Rebook.bookmark_controller = {
                         });
                     },
                     delete: function(item) {
-                        let data = {
+                        var data = {
                             id: item.id
                         };
                         Rebook.delete("bookmarks", data).then(function(bookmark) {
@@ -79,7 +79,7 @@ Rebook.bookmark_controller = {
 
     create: function(d, event, instance) {
         event.preventDefault();
-        let data = {
+        var data = {
             url: instance.new_bookmark_url,
             folderId: Rebook.newBookmarkVm.select,
             notes: instance.new_bookmark_notes

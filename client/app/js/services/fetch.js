@@ -1,5 +1,5 @@
 Rebook.fetch = function(entity, filter) {
-    let apiUrl = "http://169.45.234.69/rebook/api/";
+    var apiUrl = "http://169.45.234.69/rebook/api/";
     filter = filter || "{}";
     return fetch(apiUrl + entity + "?filter=" + filter)
         .then(function(response) {

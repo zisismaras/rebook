@@ -1,5 +1,5 @@
 Rebook.create = function(entity, data) {
-    let apiUrl = "http://169.45.234.69/rebook/api/";
+    var apiUrl = "http://169.45.234.69/rebook/api/";
     return fetch(apiUrl + entity, {
             method: 'post',
             headers: {

@@ -49,7 +49,7 @@ Rebook.folder_controller = {
 
     create: function(d, event, instance) {
         event.preventDefault();
-        let data = {
+        var data = {
             name: instance.folder_name,
             description: instance.folder_description
         };
